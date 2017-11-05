@@ -69,7 +69,7 @@ class GaussianMixtureModel:
 			R, lP, P = self.Estep(pi_vec, X, means, covs)
 			count+=1
 			print 'Running EM Algorithm, Step: '+str(count)
-			#if np.sum(([np.square(np.linalg.norm(means[k,:]-old[k,:])) for k in range(means.shape[0])]))<10 and count >= 10:
+			# Stopping criteria
 			if np.sum(map(lambda k: np.linalg.norm(means[k,:]-old[k,:]), range(means.shape[0]))) <= 10 and count >= 10:
 				break
 			old = means
