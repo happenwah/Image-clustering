@@ -79,6 +79,10 @@ class GaussianMixtureModel:
 		# Image ready for plotting
 		self.clustered_EM = np.uint8(N.reshape((self.image.shape[0],self.image.shape[1],3)))
 
+"""
+Example with a cells' image.
+Feel free to try out new ones.
+"""
 
 im_name = 'FluorescentCells.jpg'
 num_clusters = 3
