@@ -49,7 +49,7 @@ class GaussianMixtureModel:
 		pi_vec = np.mean(R, axis=0)
 		# Means
 		mean_vec = np.divide((np.einsum('ij,il->jl',R,X)).T, np.sum(R, axis=0, keepdims=True)).T
-		# Covariance matrices
+		# Covariance matrices + diagonal matrix in order to avoid singularities
 		sigma_vec = np.divide(np.einsum('ij,ikl->jkl',R,self.Aux).T, np.sum(R, axis=0)).T - np.einsum('ij,il->ijl', mean_vec, mean_vec) + 7e-1*np.array(map(lambda k: np.eye(X.shape[1]), np.arange(R.shape[1])))
 		return pi_vec,mean_vec,np.array(sigma_vec)
 
