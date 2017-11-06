@@ -31,8 +31,8 @@ class GaussianMixtureModel:
 			D_mat = self.dist_matrix(self.centroids)
 			self.labels = np.argmin(D_mat, axis=1)
 		print ('K-Means, %d Steps, Time elapsed: %.2f') % (num_steps, time()-t_0)
-		self.clustered_k_Means = np.uint8(np.array([self.centroids[k,:] for k in self.labels]).reshape((640,640,3)))
-		self.A = np.array([self.centroids[k,:] for k in self.labels]).reshape((640,640,3))
+		self.clustered_k_Means = np.uint8(np.array([self.centroids[k,:] for k in self.labels]).reshape((self.image.shape[0],self.image.shape[1],3)))
+		self.A = np.array([self.centroids[k,:] for k in self.labels]).reshape((self.image.shape[0],self.image.shape[1],3))
 
 	def Estep(self, pi, X, means, covs):
 		# Conditional densities of each point xi belonging to each cluster k
@@ -77,7 +77,7 @@ class GaussianMixtureModel:
 		# Return the pixel matrix of the weighted means
 		N = np.dot(R, means)
 		# Image ready for plotting
-		self.clustered_EM = np.uint8(N.reshape((640,640,3)))
+		self.clustered_EM = np.uint8(N.reshape((self.image.shape[0],self.image.shape[1],3)))
 
 
 im_name = 'FluorescentCells.jpg'
