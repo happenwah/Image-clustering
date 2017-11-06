@@ -35,21 +35,21 @@ class GaussianMixtureModel:
 		self.A = np.array([self.centroids[k,:] for k in self.labels]).reshape((640,640,3))
 
 	def Estep(self, pi, X, means, covs):
-		# conditional densities of each point xi belonging to each cluster k
+		# Conditional densities of each point xi belonging to each cluster k
 		P = np.array(map(lambda k: multivariate_normal.pdf(X, mean=means[k,:], cov=covs[k,:,:]), np.arange(self.K))).T
-		# conditional log pdf
+		# Conditional log pdf
 		lP = np.array(map(lambda k: multivariate_normal.logpdf(X, mean=means[k,:], cov=covs[k,:,:]),np.arange(self.K)))
 		C = np.dot(P, pi) # normalization constant for each element i
-		#matrix of responsibilities
+		# Matrix of responsibilities
 		R = np.divide(np.dot(P,np.diag(pi)).T,C).T
 		return R,lP,P
 
 	def Mstep(self, R, X):
-		# vector of weights
+		# Vector of weights
 		pi_vec = np.mean(R, axis=0)
-		# means
+		# Means
 		mean_vec = np.divide((np.einsum('ij,il->jl',R,X)).T, np.sum(R, axis=0, keepdims=True)).T
-		# covariance matrices
+		# Covariance matrices
 		sigma_vec = np.divide(np.einsum('ij,ikl->jkl',R,self.Aux).T, np.sum(R, axis=0)).T - np.einsum('ij,il->ijl', mean_vec, mean_vec) + 7e-1*np.array(map(lambda k: np.eye(X.shape[1]), np.arange(R.shape[1])))
 		return pi_vec,mean_vec,np.array(sigma_vec)
 
@@ -74,9 +74,9 @@ class GaussianMixtureModel:
 				break
 			old = means
 		print ('EM Algorithm, %d Steps, Time elapsed: %.2f') % (count, time()-t_0)
-		# return the pixel matrix of the weighted means
+		# Return the pixel matrix of the weighted means
 		N = np.dot(R, means)
-		# image ready for plotting
+		# Image ready for plotting
 		self.clustered_EM = np.uint8(N.reshape((640,640,3)))
 
 
